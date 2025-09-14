@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Julia Notebooks</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('https://ibb.co/PvvJBCYK'); /* Replace if needed */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      color: black;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 10vh;
+      font-size: 3em;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    p {
+      font-size: 1.2em;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li a {
+      color: black;
+      text-decoration: none;
+      font-weight: bold;
+      display: block;
+      padding: 8px;
+      transition: background-color 0.3s;
+    }
+
+    li a:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    #file-list {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 8px;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>My Julia Notebooks</h1>
+  <p>Welcome to my collection of Julia notebooks. Explore and learn!</p>
+  <img src="https://i.imgur.com/S7Pc5I9.png" alt="Notebook Image">
+
+  <h2>Available Notebooks</h2>
+  <ul id="file-list">Loading notebooks...</ul>
+
+  <script>
+    const repoOwner = "prostofosund"; // ← Replace this
+    const repoName = "my-Julia-notebooks";      // ← Replace this
+    const folderPath = "";             // Optional: e.g., "notebooks"
+
+    fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderPath}`)
+      .then(response => response.json())
+      .then(data => {
+        const fileList = document.getElementById("file-list");
+        fileList.innerHTML = "";
+
+        data.forEach(item => {
+          if (item.name.endsWith(".jl")) {
+            const li = document.createElement("li");
+            const a = document.createElement("a");
+            a.href = item.download_url;
+            a.textContent = item.name;
+            a.target = "_blank";
+            li.appendChild(a);
+            fileList.appendChild(li);
+          }
+        });
+
+        if (fileList.innerHTML === "") {
+          fileList.textContent = "No files found.";
+        }
+      })
+      .catch(error => {
+        console.error("Error loading file list:", error);
+        document.getElementById("file-list").textContent = "Failed to load notebooks.";
+      });
+  </script>
+
+</body>
+</html>
+
